@@ -143,11 +143,73 @@ Users can:
 
 ## High-Level Architecture
 
-<p align="center">
-    <img src="./assets/netsight_architecture.png" width="900"/>
-</p>
+```text
+                    ┌────────────────────┐
+                    │      Frontend      │
+                    │ React + Vite       │
+                    │ (Hosted on Vercel) │
+                    └─────────┬──────────┘
+                              │
+                              │ REST APIs
+                              ▼
+                    ┌────────────────────┐
+                    │      Backend       │
+                    │ FastAPI            │
+                    │ (Hosted on Render) │
+                    └─────────┬──────────┘
+                              │
+          ┌───────────────────┴──────────────────┐
+          │                                      │
+          ▼                                      ▼
+┌────────────────────┐              ┌──────────────────┐
+│ Neon PostgreSQL    │              │ Neon Auth        │
+│ Database           │              │ Authentication   │
+└────────────────────┘              └──────────────────┘
+```
 
 ---
+
+### Service Monitoring Flow
+
+```text
+User Login
+      ↓
+Dashboard Loads
+      ↓
+Fetch User's Monitored Services
+      ↓
+Monitoring Scheduler Starts
+      ↓
+Backend Checks Service Health
+      ↓
+Latency + Status Calculated
+      ↓
+Database Updated
+      ↓
+Frontend Refreshes Dashboard
+```
+
+---
+
+### Request Lifecycle
+
+```text
+User submits service details
+            ↓
+Frontend sends API request
+            ↓
+FastAPI validates request
+            ↓
+Database stores service details
+            ↓
+Monitoring service checks server
+            ↓
+Latency + Health calculated
+            ↓
+Database updated
+            ↓
+Frontend refreshes UI
+```
 
 ### System Flow
 
